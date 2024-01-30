@@ -68,18 +68,18 @@ def dbus_listener(stdout, queue_search_results, logging):
             logging.debug("GetCalendars returning %s", calendarsFromThunderbird)
             return calendarsFromThunderbird
 
-        @dbus.service.method('org.kde.plasma.thunderbird_integration', in_signature='ii', out_signature='a(ssssss)')
-        def GetEventsInDateRange(self, from_date, to_date):
-            logging.debug("GetEventsInDateRange from from: %s  to: %s", from_date, to_date)
+        # @dbus.service.method('org.kde.plasma.thunderbird_integration', in_signature='ii', out_signature='a(ssssss)')
+        # def GetEventsInDateRange(self, from_date, to_date):
+        #     logging.debug("GetEventsInDateRange from from: %s  to: %s", from_date, to_date)
 
-            logging.debug("GetEventsInDateRange set event")
-            sendMessage(stdout, encodeMessage({ "action": "search", "from": from_date, "to": to_date }))
+        #     logging.debug("GetEventsInDateRange set event")
+        #     sendMessage(stdout, encodeMessage({ "action": "search", "from": from_date, "to": to_date }))
             
-            lastSearchResultFromThunderbird = queue_search_results.get()
-            logging.debug("GetEventsInDateRange proceed after event!")
-            logging.debug("GetEventsInDateRange lastSearchResultFromThunderbird %s", lastSearchResultFromThunderbird)
+        #     lastSearchResultFromThunderbird = queue_search_results.get()
+        #     logging.debug("GetEventsInDateRange proceed after event!")
+        #     logging.debug("GetEventsInDateRange lastSearchResultFromThunderbird %s", lastSearchResultFromThunderbird)
 
-            return lastSearchResultFromThunderbird
+        #     return lastSearchResultFromThunderbird
 
         @dbus.service.method('org.kde.plasma.thunderbird_integration', in_signature='a(s)ii', out_signature='a(ssssss)')
         def GetEventsInDateRangeFromCalendars(self, arr_calendar_ids, from_date, to_date):

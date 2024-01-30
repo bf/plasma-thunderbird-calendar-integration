@@ -84,5 +84,5 @@ public Q_SLOTS:
 private:
     QStandardItemModel *mEtm = nullptr;
     ThunderbirdCalendars mCalendars;
-    QSet<QString> mEnabledCalendars;
+    QSet<QString> mEnabledCalendarIds;
 };

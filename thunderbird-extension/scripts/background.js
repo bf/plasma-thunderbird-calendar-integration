@@ -195,10 +195,11 @@ port.onMessage.addListener((message) => {
 
   switch (message.action) {
     case "search":
+      const arrCalendarIds = message.arr_calendar_ids
       const fromDate = message.from
       const toDate = message.to
-      console.log("search fromDate", fromDate, "toDate", toDate)
-      searchEventsInDateRange(fromDate, toDate)
+      console.log("search fromDate", fromDate, "toDate", toDate, "arrCalendarIds", arrCalendarIds)
+      searchEventsInDateRange(arrCalendarIds, fromDate, toDate)
       break;
 
   default:
@@ -207,8 +208,10 @@ port.onMessage.addListener((message) => {
 });
 
 
-async function searchEventsInDateRange(fromDate, toDate) {
-  console.log("searchEventsInDateRange", fromDate, toDate)
+let calendarColors = {}
+
+async function searchEventsInDateRange(arrCalendarIds, fromDate, toDate) {
+  console.log("searchEventsInDateRange", arrCalendarIds, fromDate, toDate)
 
   const strFromDate = (""+fromDate)
   const strToDate = (""+toDate)
@@ -250,14 +253,16 @@ async function searchEventsInDateRange(fromDate, toDate) {
 
   const arrEvents = []
   events.map(function (item) {
-    arrEvents.push([
-      item.id, 
-      item.title.trim(), 
-      item.calendarId, 
-      calendarColors[item.calendarId],
-      item.startDate,
-      item.endDate
-    ])
+    if (arrCalendarIds.indexOf(item.calendarId) > -1) {
+      arrEvents.push([
+        item.id, 
+        item.title.trim(), 
+        item.calendarId, 
+        calendarColors[item.calendarId],
+        item.startDate,
+        item.endDate
+      ])
+    }
   })
 
     console.log("searchEventsInDateRange arrEvents return", arrEvents)
@@ -271,7 +276,6 @@ function sendMessageToNativeScript(data) {
    port.postMessage(data)
 }
 
-let calendarColors = {}
 
 async function loadCalendars() {
   console.log("loadCalendars")
@@ -289,6 +293,8 @@ async function loadCalendars() {
 
     calendarColors[calendar.id] = calendar.color
   })
+
+  console.log("calendarColors", calendarColors)
 
   sendMessageToNativeScript({ calendars })
   // sendMessageToNativeScript("ping")

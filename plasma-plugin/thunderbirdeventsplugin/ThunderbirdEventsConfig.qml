@@ -29,12 +29,12 @@ Item {
         id: calendarModel
     }
 
-    // Invisible, used to measure implicitHeight of checkboxes so we can
-    // adjust row height in rowDelegate
-    CheckBox {
-        id: checkboxSize
-        visible: false
-    }
+    // // Invisible, used to measure implicitHeight of checkboxes so we can
+    // // adjust row height in rowDelegate
+    // CheckBox {
+    //     id: checkboxSize
+    //     visible: false
+    // }
 
     TableView {
         id: calendarTreeView
@@ -55,6 +55,7 @@ Item {
                         if (checked === styleData.value["checked"]) {
                             return;
                         }
+                        
                         calendarModel.setChecked(styleData.value["id"], checked);
                         thunderbirdCalendarEventsConfig.configurationChanged();
                     }

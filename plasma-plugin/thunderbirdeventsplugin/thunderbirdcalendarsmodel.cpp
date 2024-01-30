@@ -75,9 +75,58 @@ ThunderbirdCalendarsModel::ThunderbirdCalendarsModel(QObject *parent)
 
     // load settings
     auto config = KSharedConfig::openConfig();
-    auto group = config->group("ThunderbirdEventsPlugin");
-    const auto enabledCalendarIds = group.readEntry(QStringLiteral("calendars"), QList<QString>());
-    mEnabledCalendars = QSet<QString>(enabledCalendarIds.begin(), enabledCalendarIds.end());
+    auto group = config->group("ThunderbirdCalendarPlasmaIntegrationPlugin");
+    QList<QString> enabledCalendarIds = group.readEntry(QStringLiteral("enabledCalendarIds"), QList<QString>());
+    QList<QString> previouslySeenCalendarIds = group.readEntry(QStringLiteral("previouslySeenCalendarIds"), QList<QString>());
+
+    qWarning() << QStringLiteral("ThunderbirdCalendarsModel enabledCalendarIds") << enabledCalendarIds;
+    qWarning() << QStringLiteral("ThunderbirdCalendarsModel previouslySeenCalendarIds") << previouslySeenCalendarIds;
+
+    // check if a calendar which was previously enabled by the user
+    // has been removed. If yes, update the persistent config
+    bool atLeastOneCalendarIdWasEnabledButHasNowBeenRemoved = false; 
+    for (int i = 0; i < enabledCalendarIds.length(); ++i) {
+        bool found = false;
+        for (int j = 0; j < calendars.length(); ++j) {
+            if (enabledCalendarIds.at(i) == calendars.at(j).id) {
+                found = true;
+                break;
+            }    
+        }
+        
+        if (!found) {
+            atLeastOneCalendarIdWasEnabledButHasNowBeenRemoved = true;
+            enabledCalendarIds.removeAll(enabledCalendarIds.at(i));
+        }
+    }
+
+    // auto-enable new calendars that we receive first time from thunderbird. 
+    bool atLeastOneCalendarReveivedFromThunderbirdIsNew = false;
+    for (int i = 0; i < calendars.length(); ++i) {
+        if (!previouslySeenCalendarIds.contains(calendars.at(i).id)) {
+            atLeastOneCalendarReveivedFromThunderbirdIsNew = true;
+            enabledCalendarIds.append(calendars.at(i).id);
+        }
+    }
+
+    // if a stale calendarId was found or a new calendar is auto-enabled in config, then update config
+    if (atLeastOneCalendarIdWasEnabledButHasNowBeenRemoved || atLeastOneCalendarReveivedFromThunderbirdIsNew) {
+        qWarning() << QStringLiteral("ThunderbirdCalendarsModel WRITING enabledCalendarIds") << enabledCalendarIds;
+        group.writeEntry("enabledCalendarIds", enabledCalendarIds);
+    }
+
+    // mark all calendars received from thunderbird as previously seen
+    QList<QString> calendarIdsFromThunderbird;
+    for (const ThunderbirdCalendar& cal : calendars) {
+        calendarIdsFromThunderbird << cal.id;
+    }
+    previouslySeenCalendarIds = calendarIdsFromThunderbird;
+    group.writeEntry("previouslySeenCalendarIds", previouslySeenCalendarIds);
+    qWarning() << QStringLiteral("ThunderbirdCalendarsModel WRITING previouslySeenCalendarIds") << previouslySeenCalendarIds;
+
+    // locally stored enabled calendar IDs
+    mEnabledCalendarIds = QSet<QString>(enabledCalendarIds.begin(), enabledCalendarIds.end());
+    qWarning() << QStringLiteral("ThunderbirdCalendarsModel USING mEnabledCalendarIds") << mEnabledCalendarIds;
 
     qDebug() << QStringLiteral("calendars.length():") << calendars.length();
     mEtm = new QStandardItemModel(this);
@@ -91,7 +140,7 @@ ThunderbirdCalendarsModel::ThunderbirdCalendarsModel(QObject *parent)
         rowItem->setData(QVariantMap{
             {QStringLiteral("id"), calendar.id},
             {QStringLiteral("name"), calendar.name},
-            {QStringLiteral("checked"), mEnabledCalendars.contains(calendar.id)},
+            {QStringLiteral("checked"), mEnabledCalendarIds.contains(calendar.id)},
             {QStringLiteral("color"), calendar.color}
         }, DataRole);
 
@@ -113,24 +162,35 @@ void ThunderbirdCalendarsModel::setChecked(QString calendarId, bool checked)
 {   
     bool selectionHasBeenChanged = false;
     if (checked) {
-        selectionHasBeenChanged = !mEnabledCalendars.contains(calendarId);
-        mEnabledCalendars.insert(calendarId);
+        selectionHasBeenChanged = !mEnabledCalendarIds.contains(calendarId);
+        mEnabledCalendarIds.insert(calendarId);
     } else {
-        selectionHasBeenChanged = mEnabledCalendars.remove(calendarId);
+        selectionHasBeenChanged = mEnabledCalendarIds.remove(calendarId);
     }
+
+//     if (selectionHasBeenChanged) {
+//         Q_EMIT dataChanged();
+    // }
+
+    qWarning() << "ThunderbirdCalendarsModel::setChecked new list" << mEnabledCalendarIds.values();
 }
 
 void ThunderbirdCalendarsModel::saveConfig()
-{
+{   
+    qWarning() << "ThunderbirdCalendarsModel::saveConfig()";
+
     auto config = KSharedConfig::openConfig();
-    auto group = config->group("ThunderbirdEventsPlugin");
-    auto savedList = group.readEntry("calendars", QList<QString>());
-    auto currentList = mEnabledCalendars.values();
+    auto group = config->group("ThunderbirdCalendarPlasmaIntegrationPlugin");
+    auto savedList = group.readEntry("enabledCalendarIds", QList<QString>());
+    auto currentList = mEnabledCalendarIds.values();
     std::sort(savedList.begin(), savedList.end());
     std::sort(currentList.begin(), currentList.end());
 
+    qWarning() << "ThunderbirdCalendarsModel::saveConfig() old:" << savedList;
+    qWarning() << "ThunderbirdCalendarsModel::saveConfig() new:" << currentList;
+
     if (currentList != savedList) {
-        group.writeEntry("calendars", currentList);
+        group.writeEntry("enabledCalendarIds", currentList);
         SettingsChangeNotifier::self()->notifySettingsChanged();
     }
 }

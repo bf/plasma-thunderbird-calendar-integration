@@ -28,9 +28,7 @@
 
 
 ThunderbirdEventsPlugin::ThunderbirdEventsPlugin(QObject *parent) {
-
     connect(SettingsChangeNotifier::self(), &SettingsChangeNotifier::settingsChanged, this, &ThunderbirdEventsPlugin::onSettingsChanged);
-
     qCDebug(THUNDERBIRDEVENTSPLUGIN_LOG) << "PIM Events Plugin activated";
     onSettingsChanged();
 }
@@ -38,10 +36,10 @@ ThunderbirdEventsPlugin::ThunderbirdEventsPlugin(QObject *parent) {
 void ThunderbirdEventsPlugin::onSettingsChanged()
 {
     const auto config = KSharedConfig::openConfig();
-    const auto group = config->group("ThunderbirdEventsPlugin");
-    const QList<QString> calendars = group.readEntry(QStringLiteral("calendars"), QList<QString>());
+    const auto group = config->group("ThunderbirdCalendarPlasmaIntegrationPlugin");
+    const QList<QString> calendars = group.readEntry(QStringLiteral("enabledCalendarIds"), QList<QString>());
     
-    qWarning() << "onSettingsChanged" << calendars;
+    qWarning() << "ThunderbirdEventsPlugin::onSettingsChanged" << calendars;
 
     mThunderbirdCalendarIds = calendars;
 }
@@ -70,7 +68,7 @@ void ThunderbirdEventsPlugin::loadEventsForDateRange(const QDate &startDate, con
     qDBusRegisterMetaType<ThunderbirdCalendarEvents>();
 
     qWarning() << QStringLiteral("before dbus");
-    QDBusReply<ThunderbirdCalendarEvents> reply = interface.call(QStringLiteral("GetEventsInDateRange"), intStartDate, intEndDate);
+    QDBusReply<ThunderbirdCalendarEvents> reply = interface.call(QStringLiteral("GetEventsInDateRangeFromCalendars"), mThunderbirdCalendarIds, intStartDate, intEndDate);
 
     if (!reply.isValid()) {
        qWarning() << QStringLiteral("D-Bus call failed:") << reply.error().message();
@@ -81,6 +79,7 @@ void ThunderbirdEventsPlugin::loadEventsForDateRange(const QDate &startDate, con
     
     QMultiHash<QDate, CalendarEvents::EventData>* eventsByDate = new QMultiHash<QDate, CalendarEvents::EventData>();
 
+    QString formatOfThunderbirdTimestamp = QStringLiteral("yyyyMMddThhmmss");
     for (const ThunderbirdCalendarEvent &entry : reply.value()) {
         CalendarEvents::EventData* newEvent = new CalendarEvents::EventData();
 
@@ -89,11 +88,13 @@ void ThunderbirdEventsPlugin::loadEventsForDateRange(const QDate &startDate, con
         newEvent->setUid(QStringLiteral("ThunderbirdCalendarEvent-") + entry.id);
         newEvent->setEventColor(entry.color);
 
-        QDateTime startDateTime = QDateTime::fromString(entry.startTime, QStringLiteral("yyyyMMddThhmmss"));
+        QDateTime startDateTime = QDateTime::fromString(entry.startTime, formatOfThunderbirdTimestamp);
         newEvent->setStartDateTime(startDateTime);
 
-        QDateTime endDateTime = QDateTime::fromString(entry.endTime, QStringLiteral("yyyyMMddThhmmss"));
+        QDateTime endDateTime = QDateTime::fromString(entry.endTime, formatOfThunderbirdTimestamp);
         newEvent->setEndDateTime(endDateTime);
+
+        // qWarning() << "newEvent: " << newEvent->title() << " " << newEvent->eventColor() <<  " == " << entry.color;
 
         eventsByDate->insert(startDateTime.date(), *newEvent);
     }

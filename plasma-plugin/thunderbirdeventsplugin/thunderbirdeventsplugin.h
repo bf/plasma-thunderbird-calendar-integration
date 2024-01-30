@@ -17,7 +17,7 @@
 #include <QString>
 
 struct ThunderbirdCalendarEvent {
-    // sss
+    // ssssss
     QString id;
     QString title;
     QString calendarId;
@@ -82,7 +82,7 @@ public:
 
 private Q_SLOTS:
     void onSettingsChanged();
-    
+
 private:
     QList<QString> mThunderbirdCalendarIds;
     QDate mStart;
