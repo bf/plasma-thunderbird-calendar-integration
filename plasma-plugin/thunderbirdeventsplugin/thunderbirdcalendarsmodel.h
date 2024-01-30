@@ -59,10 +59,10 @@ Q_DECLARE_METATYPE(ThunderbirdCalendar);
 Q_DECLARE_METATYPE(ThunderbirdCalendars);
 
 
-namespace Akonadi
-{
-class EntityTreeModel;
-}
+// namespace Akonadi
+// {
+// class EntityTreeModel;
+// }
 
 class ThunderbirdCalendarsModel : public QSortFilterProxyModel
 {
@@ -76,14 +76,12 @@ public:
     ~ThunderbirdCalendarsModel() override;
 
     QHash<int, QByteArray> roleNames() const override;
-    // QVariant data(const QModelIndex &index, int role) const override;
 
 public Q_SLOTS:
     void setChecked(QString calendarId, bool checked);
     void saveConfig();
 
 private:
-    // Akonadi::EntityTreeModel *mEtm = nullptr;
     QStandardItemModel *mEtm = nullptr;
     ThunderbirdCalendars mCalendars;
     QSet<QString> mEnabledCalendars;

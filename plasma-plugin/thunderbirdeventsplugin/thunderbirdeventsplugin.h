@@ -7,21 +7,14 @@
 
 #pragma once
 
-#include <CalendarEvents/CalendarEventsPlugin>
-// #include <CalendarEvents/EventData>
 // see details at https://github.com/KDE/kdeclarative/blob/3339e0f0e3f4016b5d1f3b6d63a0c290f09d6541/src/calendarevents/calendareventsplugin.h
+#include <CalendarEvents/CalendarEventsPlugin>
 
 #include <KCalendarCore/Calendar>
 
 #include <QDBusArgument>
 #include <QDebug>
 #include <QString>
-
-// namespace Akonadi
-// {
-// class ETMCalendar;
-// }
-
 
 struct ThunderbirdCalendarEvent {
     // sss
@@ -75,11 +68,7 @@ inline const QDBusArgument &operator>>(const QDBusArgument &argument, Thunderbir
 Q_DECLARE_METATYPE(ThunderbirdCalendarEvent);
 Q_DECLARE_METATYPE(ThunderbirdCalendarEvents);
 
-
-
-// class ThunderbirdDataSource;
 class ThunderbirdEventsPlugin : public CalendarEvents::CalendarEventsPlugin
-    //, public KCalendarCore::Calendar::CalendarObserver
 {
     Q_OBJECT
     Q_INTERFACES(CalendarEvents::CalendarEventsPlugin)
@@ -87,24 +76,14 @@ class ThunderbirdEventsPlugin : public CalendarEvents::CalendarEventsPlugin
 
 public:
     explicit ThunderbirdEventsPlugin(QObject *parent = nullptr);
-    // explicit ThunderbirdEventsPlugin(ThunderbirdDataSource *factory, QObject *parent = nullptr);
     ~ThunderbirdEventsPlugin() override;
 
-    // CalendarEvents::CalendarEventsPlugin
     void loadEventsForDateRange(const QDate &startDate, const QDate &endDate) override;
-
-    // // KCalendarCore::Calendar::CalendarObserver
-    // void calendarIncidenceChanged(const KCalendarCore::Incidence::Ptr &incidence) override;
-    // void calendarIncidenceAdded(const KCalendarCore::Incidence::Ptr &incidence) override;
-    // // Handle removal before it really happens otherwise we would not be able
-    // // to lookup corresponding Akonadi ID in ETMCalendar
-    // void calendarIncidenceAboutToBeDeleted(const KCalendarCore::Incidence::Ptr &incidence) override;
 
 private Q_SLOTS:
     void onSettingsChanged();
     
 private:
-    // ThunderbirdDataSource *const mDataSource;
     QList<QString> mThunderbirdCalendarIds;
     QDate mStart;
     QDate mEnd;

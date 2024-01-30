@@ -112,7 +112,7 @@ set(KPIMITINERARY_LIB_VERSION "5.24.4")
 set(AKONADINOTES_LIB_VERSION "5.24.4")
 set(KPIM_MIME_VERSION "5.24.4")
 find_package(KPim${KF_MAJOR_VERSION}Mime ${KPIM_MIME_VERSION} CONFIG REQUIRED)
-find_package(KPim${KF_MAJOR_VERSION}AkonadiNotes ${AKONADINOTES_LIB_VERSION} CONFIG REQUIRED)
+# find_package(KPim${KF_MAJOR_VERSION}AkonadiNotes ${AKONADINOTES_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF${KF_MAJOR_VERSION}CalendarCore ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}CalendarUtils ${CALENDAR_UTILS_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}WebEngineViewer ${MESSAGELIB_LIB_VERSION} CONFIG REQUIRED)
@@ -122,7 +122,7 @@ find_package(KPim${KF_MAJOR_VERSION}MessageViewer ${MESSAGELIB_LIB_VERSION} CONF
 find_package(KPim${KF_MAJOR_VERSION}AddressbookImportExport ${KADDRESSBOOK_IMPORTEXPORT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}Libkleo ${LIBKLEO_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}GrantleeTheme ${GRANTLEETHEME_LIB_VERSION} CONFIG REQUIRED)
-find_package(KPim${KF_MAJOR_VERSION}PimCommonAkonadi ${PIMCOMMON_LIB_VERSION} CONFIG REQUIRED)
+# find_package(KPim${KF_MAJOR_VERSION}PimCommonAkonadi ${PIMCOMMON_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF${KF_MAJOR_VERSION}TextGrammarCheck ${KTEXTADDONS_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF${KF_MAJOR_VERSION}TextTranslator ${KTEXTADDONS_MIN_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}Libkdepim ${LIBKDEPIM_LIB_VERSION} CONFIG REQUIRED)
@@ -132,8 +132,8 @@ find_package(KPim${KF_MAJOR_VERSION}MessageComposer ${MESSAGELIB_LIB_VERSION} CO
 find_package(KPim${KF_MAJOR_VERSION}MessageList ${MESSAGELIB_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}CalendarSupport ${CALENDARSUPPORT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}EventViews ${EVENTVIEW_LIB_VERSION} CONFIG REQUIRED)
-find_package(KPim${KF_MAJOR_VERSION}Akonadi ${AKONADI_LIB_VERSION} CONFIG REQUIRED)
-find_package(KPim${KF_MAJOR_VERSION}AkonadiCalendar ${AKONADICALENDAR_LIB_VERSION} CONFIG REQUIRED)
+# find_package(KPim${KF_MAJOR_VERSION}Akonadi ${AKONADI_LIB_VERSION} CONFIG REQUIRED)
+# find_package(KPim${KF_MAJOR_VERSION}AkonadiCalendar ${AKONADICALENDAR_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}Gravatar ${GRAVATAR_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}TextEdit ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}IdentityManagement ${KIDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
@@ -142,10 +142,10 @@ find_package(KPim${KF_MAJOR_VERSION}LibKSieve ${LIBKSIEVE_LIB_VERSION} CONFIG RE
 find_package(KPim${KF_MAJOR_VERSION}Tnef ${KTNEF_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}MailTransport ${KMAILTRANSPORT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF${KF_MAJOR_VERSION}Contacts ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KPim${KF_MAJOR_VERSION}AkonadiContact ${AKONADICONTACT_LIB_VERSION} CONFIG REQUIRED)
-find_package(KPim${KF_MAJOR_VERSION}ContactEditor ${AKONADICONTACT_LIB_VERSION} CONFIG REQUIRED)
+# find_package(KPim${KF_MAJOR_VERSION}AkonadiContact ${AKONADICONTACT_LIB_VERSION} CONFIG REQUIRED)
+# find_package(KPim${KF_MAJOR_VERSION}ContactEditor ${AKONADICONTACT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}ImportWizard ${IMPORTWIZARD_LIB_VERSION} CONFIG)
-find_package(KPim${KF_MAJOR_VERSION}MailImporterAkonadi ${MAILIMPORTER_LIB_VERSION} CONFIG REQUIRED)
+# find_package(KPim${KF_MAJOR_VERSION}MailImporterAkonadi ${MAILIMPORTER_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}PkPass ${KPIMPKPASS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}Itinerary ${KPIMITINERARY_LIB_VERSION} CONFIG REQUIRED)
 
@@ -247,16 +247,16 @@ ecm_qt_declare_logging_category(loggingcategory_SRCS
 kcoreaddons_add_plugin(thunderbirdevents INSTALL_NAMESPACE plasmacalendarplugins)
 target_sources(thunderbirdevents PRIVATE
     thunderbirdeventsplugin.cpp
-    akonadipimdatasource.cpp
-    eventdatavisitor.cpp
+    # akonadipimdatasource.cpp
+    # eventdatavisitor.cpp
     settingschangenotifier.cpp
-    eventmodel.cpp
+    # eventmodel.cpp
     ${loggingcategory_SRCS}
     thunderbirdeventsplugin.h
-    akonadipimdatasource.h
-    eventdatavisitor.h
+    # akonadipimdatasource.h
+    # eventdatavisitor.h
     settingschangenotifier.h
-    eventmodel.h
+    # eventmodel.h
     )
 
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
@@ -265,8 +265,8 @@ endif()
 
 target_link_libraries(thunderbirdevents
     Qt::Core
-    KPim${KF_MAJOR_VERSION}::AkonadiCore
-    KPim${KF_MAJOR_VERSION}::AkonadiCalendar
+    # KPim${KF_MAJOR_VERSION}::AkonadiCore
+    # KPim${KF_MAJOR_VERSION}::AkonadiCalendar
     KF${KF_MAJOR_VERSION}::CalendarCore
     KF${KF_MAJOR_VERSION}::CalendarEvents
     KPim${KF_MAJOR_VERSION}::EventViews # for reading KOrganizer calendar colors
@@ -297,7 +297,7 @@ target_link_libraries(thunderbirdcalendarsplugin
     Qt::Core
     Qt::Qml
     Qt::DBus
-    KPim${KF_MAJOR_VERSION}::AkonadiCore
+    # KPim${KF_MAJOR_VERSION}::AkonadiCore
     KF${KF_MAJOR_VERSION}::CalendarCore
     KF${KF_MAJOR_VERSION}::ConfigCore
     KF${KF_MAJOR_VERSION}::Crash
