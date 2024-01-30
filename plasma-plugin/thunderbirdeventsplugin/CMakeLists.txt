@@ -284,11 +284,11 @@ target_sources(thunderbirdcalendarsplugin PRIVATE
     thunderbirdcalendarsplugin.cpp
     thunderbirdcalendarsmodel.cpp
     settingschangenotifier.cpp
-    connection.cpp
+    # connection.cpp
     ${loggingcategory_SRCS}
     thunderbirdcalendarsmodel.h
     settingschangenotifier.h
-    connection.h
+    # connection.h
     )
 
 qt_add_dbus_adaptor(thunderbirdcalendarsplugin dbus.xml thunderbirdcalendarsmodel.h ThunderbirdCalendarsModel)
