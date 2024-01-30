@@ -1,0 +1,7 @@
+{
+  "name": "thunderbirdplasmaintegrationhostapp",
+  "description": "Example host for native messaging",
+  "path": "/home/beni/src/2024-thunderbird-plasma-plugin/thunderbird-host-app/thunderbird-plasma-integration-host-app.py",
+  "type": "stdio",
+  "allowed_extensions": [ "thunderbird-plasma-integration-extension@deutsche-cyberberatung.de" ]
+}

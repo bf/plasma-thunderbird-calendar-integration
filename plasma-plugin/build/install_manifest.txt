@@ -1,0 +1,5 @@
+/usr/share/qlogging-categories5/thunderbird-plasma-integration.categories
+/usr/lib/qt/plugins/plasmacalendarplugins/thunderbirdevents.so
+/usr/lib/qt/qml/org/kde/plasma/ThunderbirdCalendars/libthunderbirdcalendarsplugin.so
+/usr/lib/qt/qml/org/kde/plasma/ThunderbirdCalendars/qmldir
+/usr/lib/qt/plugins/plasmacalendarplugins/thunderbirdevents/ThunderbirdEventsConfig.qml

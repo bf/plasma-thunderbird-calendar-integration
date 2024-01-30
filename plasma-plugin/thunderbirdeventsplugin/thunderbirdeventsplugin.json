@@ -1,0 +1,18 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "benjaminflesch@icloud.com",
+                "Name": "Benjamin Flesch"
+            }
+        ],
+        "Description": "Calendar plugin for displaying events from thunderbird",
+        "Icon": "view-calendar",
+        "Name": "Thunderbird Events Plugin",
+        "ServiceTypes": [
+            "PlasmaCalendar/Plugin"
+        ],
+        "Version": "1.0"
+    },
+    "X-KDE-PlasmaCalendar-ConfigUi": "thunderbirdevents/ThunderbirdEventsConfig.qml"
+}

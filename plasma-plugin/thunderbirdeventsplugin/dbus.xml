@@ -1,0 +1,10 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.kde.plasma.thunderbird_integration">
+    <method name="GetCalendars">
+      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="ThunderbirdCalendars" />
+      <arg name="matches" type="a(sss)" direction="out">
+      </arg>
+    </method>
+  </interface>
+</node>
